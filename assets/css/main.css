@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: "Teko";
+        src: url("/assets/fonts/Teko-VariableFont_wght.ttf");
+    }
+}
+
+.container {
+    max-width: 1820px;
+    margin: 0 auto;
+}
