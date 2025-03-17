@@ -5,9 +5,15 @@ const hostName = useLocalStorage().getItem('host')
 
 export default {
     A_SET_ALL_NEWS(context): void {
-        fetch(`${hostName}/news`).then(res => {
-            if(res.ok) return res.json()
-        }).then((data: I_ApiNewsData[]) => context.commit("M_SET_ALL_NEWS", data))
+        fetch(`${hostName}`).then(res => {
+            if(res.ok) {
+                return res.json()
+            }
+        }).then((data: I_ApiNewsData[]) => {
+            console.log(data, 'x')
+            context.commit("M_SET_ALL_NEWS", data.news)
+        })
+            .catch((err) => console.log(err))
     },
     async A_SET_NEW_NEWS(context, payload: I_NewsConfigForm): boolean {
         let added: boolean = false
