@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         $store.dispatch("A_CHANGE_LAYOUT_STATE", false)
 
         if(to.path === '/') {
-            return navigateTo('/admin')
+            return navigateTo('/client')
         }
     }
 

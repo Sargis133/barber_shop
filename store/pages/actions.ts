@@ -6,21 +6,23 @@ import type {
 } from "~/models/store/pages/interfaces";
 import type {I_ApiAllPagesData} from "~/models/db/interfaces";
 
+const hostName = useLocalStorage().getItem('host')
+
 export default {
     A_SET_ALL_PAGES_DATA(context): void {
-        fetch("http://localhost:8000/pages")
+        fetch(`${hostName}/pages`)
             .then(res => res.json())
             .then((data: I_ApiAllPagesData) => context.commit("M_SET_ALL_PAGES_DATA", data))
     },
     async A_CHANGE_PAGE_DATA(context, payload: I_PageDataConfig): boolean {
         let result: boolean = false
 
-        await fetch("http://localhost:8000/pages")
+        await fetch(`${hostName}/pages`)
             .then(res => res.json())
             .then(async(data: I_ApiAllPagesData): void => {
                 data[payload.pageName] = payload.data
 
-                await fetch("http://localhost:8000/pages", {
+                await fetch(`${hostName}/pages`, {
                     method: "PUT",
                     headers: {
                         'Content-Type': 'application/json'

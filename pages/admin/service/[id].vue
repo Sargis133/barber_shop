@@ -17,20 +17,13 @@ definePageMeta({
 
 const route = useRoute()
 
+const { $store } = useNuxtApp()
 const id = computed<string>(() => route.params.id)
 const type = computed<string>(() => route.query.t)
 
 let serviceData = ref({})
 
-const onGetServiceData = (): void => {
-  fetch(`http://localhost:8000/${type.value}/${id.value}`).then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-  }).then(data => serviceData.value = data)
-}
-
-onGetServiceData()
+$store.dispatch("A_GET_SERVICE_BY_ID", id.value).then(res => serviceData.value = res)
 
 
 

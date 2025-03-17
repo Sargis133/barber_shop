@@ -1,16 +1,18 @@
 import type {I_ChangeShopForm, I_ShopConfigForm} from "~/components/admin/shopConfigForm/models/interfaces";
 import type {I_ApiProductData} from "~/models/db/interfaces";
 
+const hostName = useLocalStorage().getItem('host')
+
 export default {
     A_SET_ALL_PRODUCTS(context): void {
-        fetch("http://localhost:8000/products").then(res => {
+        fetch(`${hostName}/products`).then(res => {
             if(res.ok) return res.json()
         }).then((data: I_ApiProductData[]) => context.commit("M_SET_ALL_PRODUCTS", data))
     },
    async A_CHANGE_PRODUCT_DATA(context, payload: I_ChangeShopForm): boolean {
         let changed: boolean = false
 
-        await fetch(`http://localhost:8000/products/${payload.id}`, {
+        await fetch(`${hostName}/products/${payload.id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +31,7 @@ export default {
     async A_SET_NEW_PRODUCT(context, payload: I_ShopConfigForm): boolean {
         let added: boolean = false
 
-        await fetch("http://localhost:8000/products", {
+        await fetch(`${hostName}/products`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +50,7 @@ export default {
     async A_GET_PRODUCT(context, payload: string): I_ApiProductData {
         let result: I_ApiProductData = {}
 
-        await fetch(`http://localhost:8000/products/${payload}`).then(res => {
+        await fetch(`${hostName}/products/${payload}`).then(res => {
             if(res.ok) return res.json()
         }).then((data: I_ApiProductData) => result = data)
 
@@ -57,7 +59,7 @@ export default {
     async A_DELETE_PRODUCT(context, payload: string): boolean {
         let deleted: boolean = false
 
-        await fetch(`http://localhost:8000/products/${payload}`, {
+        await fetch(`${hostName}/products/${payload}`, {
             method: "DELETE"
         }).then(res => {
             if (res.ok) {

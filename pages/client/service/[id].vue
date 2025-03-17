@@ -51,20 +51,12 @@ definePageMeta({
   layout: "client-default"
 })
 
+const { $store } = useNuxtApp()
 const route = useRoute()
 const id = computed(() => route.params.id)
-
 const serviceData = ref({})
 
-const onGetSelectedService = () => {
-    fetch(`http://localhost:8000/services/${id.value}`).then(res => res.json())
-        .then(data => serviceData.value = data)
-        .catch((err) => console.log(err))
-
-}
-
-onGetSelectedService()
-
+$store.dispatch("A_GET_SERVICE_BY_ID", id.value).then(res => serviceData.value = res)
 
 </script>
 

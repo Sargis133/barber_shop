@@ -1,5 +1,7 @@
 import type {I_ApiUserData} from "~/models/db/interfaces";
 
+const hostName = useLocalStorage().getItem('host')
+
 export default {
     A_ADMIN_IS_LOGGED(): boolean {
         const admin = useCookie("admin")
@@ -14,7 +16,7 @@ export default {
     },
     async A_ADMIN_LOGIN(context, payload): boolean {
         let response: boolean = false
-        await fetch("http://localhost:8000/users").then(res => res.json())
+        await fetch(`${hostName}/users`).then(res => res.json())
             .then((data: I_ApiUserData[]) => {
                 const findAdmin: I_ApiUserData[] = data.filter((users: I_ApiUserData): I_ApiUserData => users.login === payload.email && users.password === payload.password)
 

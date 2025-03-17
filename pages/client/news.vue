@@ -42,6 +42,7 @@ $store.dispatch("A_SET_ALL_NEWS")
 const pageData = computed<I_NewsPageData>(() => $store.getters.getNewsPageData || {})
 const allNewsData = computed(() => $store.getters.getAllNews)
 
+
 </script>
 
 <style scoped>

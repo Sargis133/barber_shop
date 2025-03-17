@@ -1,16 +1,18 @@
 import type {I_ChangedNewsConfigForm, I_NewsConfigForm} from "~/components/admin/newsConfigForm/models/interfaces";
 import type {I_ApiNewsData} from "~/models/db/interfaces";
 
+const hostName = useLocalStorage().getItem('host')
+
 export default {
     A_SET_ALL_NEWS(context): void {
-        fetch("http://localhost:8000/news").then(res => {
+        fetch(`${hostName}/news`).then(res => {
             if(res.ok) return res.json()
         }).then((data: I_ApiNewsData[]) => context.commit("M_SET_ALL_NEWS", data))
     },
     async A_SET_NEW_NEWS(context, payload: I_NewsConfigForm): boolean {
         let added: boolean = false
 
-        await fetch("http://localhost:8000/news", {
+        await fetch(`${hostName}/news`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +31,7 @@ export default {
     async A_CHANGE_NEWS_DATA(context, payload: I_ChangedNewsConfigForm): boolean {
         let changed: boolean = false
 
-        await fetch(`http://localhost:8000/news/${payload.id}`, {
+        await fetch(`${hostName}/news/${payload.id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +50,7 @@ export default {
     async A_GET_NEWS(context, payload: string): null | I_ApiNewsData {
         let result: null | I_ApiNewsData = null
 
-        await fetch(`http://localhost:8000/news/${payload}`).then(res => {
+        await fetch(`${hostName}/news/${payload}`).then(res => {
             if(res.ok) return res.json()
         }).then((data: I_ApiNewsData) => result = data)
 
@@ -57,7 +59,7 @@ export default {
     async A_DELETE_NEWS(context, payload: string): boolean {
         let deleted: boolean = false
 
-        await fetch(`http://localhost:8000/news/${payload}`, {
+        await fetch(`${hostName}/news/${payload}`, {
             method: "DELETE"
         }).then(res => {
             if (res.ok) {

@@ -3,22 +3,24 @@ import type {I_CategoryConfigForm} from "~/components/admin/categoryConfigForm/m
 import type {I_ChangeServiceForm, I_ServiceConfigForm} from "~/components/admin/serviceConfigForm/models/interfaces";
 import type {I_ApiCategoryData, I_ApiServiceData, I_ApiTypeData} from "~/models/db/interfaces";
 
+const hostName = useLocalStorage().getItem('host')
+
 export default {
     A_SET_TYPES(context): void {
-        fetch("http://localhost:8000/types").then(res => {
+        fetch(`${hostName}/types`).then(res => {
             if (res.ok) return res.json()
         })
             .then((data: I_ApiTypeData[]) => context.commit("M_SET_TYPES", data))
     },
     A_SET_CATEGORIES(context): void {
-        fetch("http://localhost:8000/categories")
+        fetch(`${hostName}/categories`)
             .then(res => {
                 if (res.ok) return res.json()
             })
             .then((data: I_ApiCategoryData[]) => context.commit("M_SET_CATEGORIES", data))
     },
     A_SET_SERVICES(context): void {
-        fetch("http://localhost:8000/services")
+        fetch(`${hostName}/services`)
             .then(res => {
                 if (res.ok) return res.json()
             })
@@ -26,7 +28,7 @@ export default {
     },
     async A_SET_NEW_TYPE(context, payload: I_TypeConfigForm): boolean {
         let added: boolean = false
-        await fetch("http://localhost:8000/types", {
+        await fetch(`${hostName}/types`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ export default {
     },
     async A_CHANGE_TYPE_DATA(context, payload: I_ChangeTypeForm): boolean {
         let changed: boolean = false
-        await fetch(`http://localhost:8000/types/${payload.id}`, {
+        await fetch(`${hostName}/types/${payload.id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -63,7 +65,7 @@ export default {
     async A_DELETE_TYPE(context, payload: string): boolean {
         let deleted: boolean = false
 
-        await fetch(`http://localhost:8000/types/${payload}`, {
+        await fetch(`${hostName}/types/${payload}`, {
             method: "DELETE"
         }).then(res => {
             if (res.ok) {
@@ -79,7 +81,7 @@ export default {
     async A_SET_NEW_CATEGORY(context, payload: I_CategoryConfigForm): boolean {
         let added: boolean = false
 
-        await fetch("http://localhost:8000/categories", {
+        await fetch(`${hostName}/categories`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ export default {
     async A_CHANGE_CATEGORY_DATA(context, payload: I_ChangeCategoryForm): boolean {
         let changed: boolean = false
 
-        await fetch(`http://localhost:8000/categories/${payload.id}`, {
+        await fetch(`${hostName}/categories/${payload.id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -117,7 +119,7 @@ export default {
     async A_DELETE_CATEGORY(context, payload: string): boolean {
         let deleted: boolean = false
 
-        await fetch(`http://localhost:8000/categories/${payload}`, {
+        await fetch(`${hostName}/categories/${payload}`, {
             method: "DELETE"
         }).then(res => {
             if (res.ok) {
@@ -132,7 +134,7 @@ export default {
     },
     async A_SET_NEW_SERVICE(context, payload: I_ServiceConfigForm): boolean {
         let added: boolean = false
-        await fetch("http://localhost:8000/services", {
+        await fetch(`${hostName}/services`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -150,7 +152,7 @@ export default {
     },
     async A_CHANGE_SERVICE_DATA(context, payload: I_ChangeServiceForm): boolean {
         let changed: boolean = false
-        await fetch(`http://localhost:8000/services/${payload.id}`, {
+        await fetch(`${hostName}/services/${payload.id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -169,7 +171,7 @@ export default {
     async A_DELETE_SERVICE(context, payload: string): boolean {
         let deleted: boolean = false
 
-        await fetch(`http://localhost:8000/services/${payload}`, {
+        await fetch(`${hostName}/services/${payload}`, {
             method: "DELETE"
         }).then(res => {
             if (res.ok) {
@@ -184,7 +186,7 @@ export default {
     },
     async A_GET_CATEGORIES_BY_TYPE(context, payload: string): I_ApiCategoryData[] {
         const categories: I_ApiCategoryData[] = []
-        await fetch("http://localhost:8000/categories").then(res => {
+        await fetch(`${hostName}/categories`).then(res => {
             if (res.ok) {
                 return res.json()
             }
@@ -195,7 +197,7 @@ export default {
     },
     async A_GET_TYPE_DATA(context, payload: string): I_ApiTypeData {
         let typeData: I_ApiTypeData = {}
-        await fetch(`http://localhost:8000/types/${payload}`).then(res => {
+        await fetch(`${hostName}/types/${payload}`).then(res => {
             if(res.ok) return res.json()
         })
             .then((data: I_ApiTypeData) => typeData = data)
@@ -203,7 +205,7 @@ export default {
     },
     async A_GET_CATEGORY_DATA(context, payload: string): I_ApiCategoryData {
       let result: I_ApiCategoryData = {}
-      await fetch(`http://localhost:8000/categories/${payload}`).then(res => {
+      await fetch(`${hostName}/categories/${payload}`).then(res => {
           if(res.ok) return res.json()
       })
           .then((data: I_ApiCategoryData) => result = data)
@@ -212,10 +214,17 @@ export default {
     async A_GET_SERVICES_BY_CATEGORY(context, payload: string): I_ApiServiceData[] {
         let services: I_ApiServiceData[] = []
 
-        await fetch(`http://localhost:8000/services`).then(res => {
+        await fetch(`${hostName}/services`).then(res => {
             if(res.ok) return res.json()
         })
             .then((data: I_ApiServiceData[]) => services = data.filter((service: I_ApiServiceData) => service.category === payload))
         return services
+    },
+    async A_GET_SERVICE_BY_ID(context, payload: string): I_ApiServiceData {
+        let service = {}
+        await fetch(`${hostName}/services/${payload}`).then(res => res.json())
+            .then(data => service = data)
+            .catch((err) => console.log(err))
+        return service
     }
 }

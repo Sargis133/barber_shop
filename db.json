@@ -2,9 +2,9 @@
   "users": [
     {
       "id": "1",
-      "name": "Valeri Esenko",
-      "login": "valeri123",
-      "password": "valeri123"
+      "name": "User Admin",
+      "login": "admin123",
+      "password": "admin123"
     }
   ],
   "services": [
