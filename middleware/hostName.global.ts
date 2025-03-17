@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         if(location.value?.includes('localhost')) {
             storage.setItem('host', 'http://localhost:8000')
         } else {
-            storage.setItem('host', 'https://sargis133.github.io/barber_shop')
+            storage.setItem('host', 'https://sargis133.github.io/barber_shop/db.json')
         }
     }
 
